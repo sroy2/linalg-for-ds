@@ -6,7 +6,7 @@
 \title{\vspace{-2.0cm}%
 	Optimization and Computational Linear Algebra for Data Science\\
 Homework 1: Vector spaces}
-%\author{Léo \textsc{Miolane} \ $\cdot$ \ \texttt{leo.miolane@gmail.com}}
+\author{\vspace{1cm}Stephen Roy \ $\cdot$ \ \texttt{stephen.i.roy@nyu.edu}}
 \date{\vspace{-1cm}Due on September 10, 2019}
 \setcounter{section}{1}
 
@@ -18,15 +18,33 @@ Homework 1: Vector spaces}
 \begin{problem}[2 points]
 	Let $u,v$ be two vectors of $\R^2$. Show that either they are linearly dependent or that they span the whole of $\R^2$.
 \end{problem}
+\begin{proof}
+If $u,v$ are linearly dependent we can assume that there exists some scalar $\lambda \in \R^2$ such that:
+$$
+u = \lambda v
+$$
+Now that we know $u$ can be written in terms of $v$ we can show that:
+$$
+\Span(u,v) = \Span(\lambda v,v) = \Span(v) \neq\R^2
+$$
+By contrast, if $u,v$ are linearly independent (and thus neither can be the \{0\}) we know that:
+$$
+\Span(u) \neq \Span(v)
+$$
+Thus the intersection of \Span(u,v) exists in two dimensions, specifically $\R^2$.
+\end{proof}	
 
 \vspace{1mm}
 
 \begin{problem}[3 points]
 	Are the following sets subspaces of $\R^3$? Justify your answer.
 	\begin{enumerate}[label=\normalfont(\textbf{\alph*})]
-		\item $E_1= \big\{ (x,y,z) \in \R^3 \, \big| \, x - 2y + z= 0 \big\}$.
-		\item $E_2= \big\{ (x,y,z) \in \R^3 \, \big| \, x - 2y + z= 3 \big\}$.
-		\item $E_3= \big\{ (x,y,z) \in \R^3 \, \big| \, 5x + y^2 + z= 0 \big\}$.
+		\item $E_1= \big\{ (x,y,z) \in \R^3 \, \big| \, x - 2y + z= 0 \big\}$.\\
+		\begin{proof} Yes, the line defined by $E_1$ passes through the origin at $E_1=(0,0,0)$ and, as a linear span where $(x,y,z)\in \R^3$ it is a subspace of $\R^3$. More specifically, because all variable terms in $E_1$ are of the first power, we see that vector addition and scalar multiplication hold true over its linear span.\end{proof}
+		\item $E_2= \big\{ (x,y,z) \in \R^3 \, \big| \, x - 2y + z= 3 \big\}$.\\
+		\begin{proof}No, $E_2=(0,0,0)$ does not include the origin, thus it is not a subspace of $\R^3$.\end{proof}
+		\item $E_3= \big\{ (x,y,z) \in \R^3 \, \big| \, 5x + y^2 + z= 0 \big\}$.\\
+		\begin{proof}No, the curve $E_3$ can not be extended for any negative $\lambda$ value of $y$ (which when squared become positive), thus it is not a subspace of $\R^3$.\end{proof}
 	\end{enumerate}
 \end{problem}
 
@@ -36,7 +54,28 @@ Homework 1: Vector spaces}
 	Suppose that $v_1, \dots, v_k \in \R^n$ are linearly independent. Let $x \in \R^n$ and assume that $x \not\in \Span(v_1,\dots, v_k)$.
 	Show that $(v_1,\dots,v_k,x)$ are linearly independent.
 \end{problem}
-
+\begin{proof}
+Given that $x \not\in \Span(v_1, \dots, v_k)$ we know, by the definition of span, that there exists no $\lambda \in \R^n$ such that any $\lambda v_i$ coincides with $x$. We can demonstrate this via contradiction by assuming there is a $\lambda_{k+1}x \neq 0$ such that the linear combination of $\lambda \{v_1, \dots, v_k, x\}=0$ \\
+$$
+\lambda_1 v_1 + \dots + \lambda_k v_k + \lambda_{k+1} x = 0
+$$
+$$
+\frac{\lambda_1}{\lambda_{k+1}} v_1 + \dots + \frac{\lambda_k}{\lambda_{k+1}} v_k+ x = 0
+$$\\
+This means that:\\
+$$
+-\frac{\lambda_1}{\lambda_{k+1}} v_1 - \dots - \frac{\lambda_k}{\lambda_{k+1}} v_k= x
+$$
+But this means we have now written x as a linear combination of $(v_1,\dots,v_k)$ which contradicts our given than $x \not\in \Span(v_1, \dots, v_k)$. Thus, because we cannot establish a $\lambda$ which cancels out $x$ using only $\lambda (v_1, \dots, v_k)$ and we know $(v_1, \dots, v_k)$ is already linearly independent, we can establish that $(v_1, \dots, v_k, x)$ must also be linearly independent and the only solution to
+$$
+\lambda_1 v_1 + \dots + \lambda_k v_k + \lambda_{k+1} x = 0
+$$
+is 
+$$
+\lambda_1 = \dots = \lambda_k = \lambda_{k+1} = 0
+$$
+This confirms that the set $\{v_1,\dots,v_k,x\}$ is linearly independent.
+\end{proof}
 \vspace{1mm}
 
 \begin{problem}[2 points]
@@ -44,6 +83,9 @@ Homework 1: Vector spaces}
 	We assume that $v_1, \dots, v_k$ are linearly independent.
 	Show (using the result of Problem~\ref{prob:add_vector}) that one can find vectors $v_{k+1}, \dots, v_{k+m}$ in $S$ such that $(v_1, \dots, v_{k+m})$ is a basis of $S$.
 \end{problem}
+\begin{proof}
+To prove set $S$ is a basis we must demonstrate that it is linearly independent and that its Span is equal to the entire vector space (in this case $\R^n$). In the event that $S$ is already the basis for $\R^n$, then there are no additional vectors that can be added to the set while maintaining linear independency. Otherwise, as seen by the result of Problem~\ref{prob:add_vector} we can add additional vectors and still maintain a linearly independent set of elements within $\R^n$. To find the basis you continue to add $m$ new vectors until you arrive at at set where the $\Span(v_1,\dots,v_k,\dots, v_{k+m}) = \R^n$. Once this occurs you have obtained a basis for $S$.
+\end{proof}
 
 \vspace{1mm}
 
@@ -54,9 +96,27 @@ Homework 1: Vector spaces}
 	$$
 	then there must exist a non-zero vector in their intersection, i.e.\ $U \cap V \neq \{0\}$.
 \end{problem}
+\begin{proof}
+Given that $U$ and $V$ are subspaces of $\R^n$, we know that their intersection must also be a subspace (by definition) between size V + W (smallest) and $\R^n$ (largest). Furthermore given $\dim(U) + \dim(V) > n$, we can use the definition of intersection to establish that at least one non-zero vector exists:
+$$
+\dim(U + V) = \dim(U) + \dim(V) - \dim(U \cap V)
+$$
+By using the maximum dimension for $\R^n$ we see that:
+$$
+\dim(\R^n) = n \leq \dim(U + V) = \dim(U) + \dim(V) - \dim(U \cap V)
+$$
+$$
+n \leq \dim(U) + \dim(V) - \dim(U \cap V)
+$$
+Subtracting n from both sides ($\dim(U) + \dim(V) > n$) shows:
+$$
+0 \leq c - \dim(U \cap V)
+$$
+$$
+\dim(U \cap V) \leq c
+$$
+Thus we've established that some constant $c$ must exist which is greater than or equal to the dimension of $U \cap V$. To satisfy this condition, for any non-zero subspace, at least one non-zero vector must exist.
+\end{proof}
 \vspace{1cm}
 \centerline{\pgfornament[width=7cm]{87}}
-
-%\bibliographystyle{plain}
-%\bibliography{./references.bib}
 \end{document}

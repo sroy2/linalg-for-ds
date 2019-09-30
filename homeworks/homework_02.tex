@@ -1,0 +1,398 @@
+\documentclass[11pt,nocut]{article}
+
+\usepackage{../latex_style/packages}
+\usepackage{../latex_style/notations}
+
+\title{\vspace{-2.0cm}%
+	Optimization and Computational Linear Algebra for Data Science\\
+Homework 2: Linear transformations \& matrices}
+\date{\vspace{-1cm}Due on September 17, 2019}
+\setcounter{section}{2}
+
+\begin{document}
+\maketitle
+\input{./preamble_homeworks.tex}
+
+\begin{problem}[2 points]
+	Which of the following are linear transformations? Justify.
+	\begin{enumerate}[label=\normalfont(\textbf{\alph*})]
+		\item 
+			$\displaystyle
+			T: \left| 
+			\begin{array}{ccc}
+				\R^2 & \to & \R^2 \\
+				(x,y) & \mapsto & (x^2+y^2, x-y)
+			\end{array}
+		\right.
+		$\\
+		
+\begin{proof}
+		%question a
+		No, given $(x_1,y_1) = (0,-2) \hspace{1mm} and \hspace{1mm} (x_2,y_2) = (-2,1)$ we see via contradiction that \\
+		$$
+		T = 
+		\begin{pmatrix}
+		x_1+x_2 \\
+		y_1+y_2
+		\end{pmatrix}
+		\neq
+		T
+		\begin{pmatrix}
+		x_1 \\
+		y_1
+		\end{pmatrix}
+		+ T
+		\begin{pmatrix}
+		x_2 \\
+		y_2
+		\end{pmatrix}
+		$$
+
+		$$
+		T = 
+		\begin{pmatrix}
+		-2 \\
+		-1
+		\end{pmatrix}
+		\neq
+		T
+		\begin{pmatrix}
+		0 \\
+		-2
+		\end{pmatrix}
+		+ T
+		\begin{pmatrix}
+		-2 \\
+		1
+		\end{pmatrix}
+		$$
+				$$
+		\begin{pmatrix}
+		5 \\
+		-1
+		\end{pmatrix}
+		\neq
+		\begin{pmatrix}
+		2 \\
+		2
+		\end{pmatrix}
+		+ 
+		\begin{pmatrix}
+		5 \\
+		-1
+		\end{pmatrix}
+		=
+		\begin{pmatrix}
+		7 \\
+		-1
+		\end{pmatrix}
+		$$
+		
+\end{proof}
+		
+		\item 
+			$\displaystyle
+			T: \left| 
+			\begin{array}{ccc}
+				\R^2 & \to & \R^2 \\
+				(x,y) & \mapsto & (x+y+1, x-y)
+			\end{array}
+		\right.
+		$\\
+		
+\begin{proof}
+		%question (b)
+		$$
+		No, \hspace{1mm} T(0,0) \to (1,0). 
+		$$
+		Furthermore, for T(x,y) to pass through the origin there must be some (x,y) such that (x+y+1) = 0 and (x-y) = 0. Solving the linear equations we find no such (x,y) exist, thus T(x,y) never passes through the origin.
+\end{proof}
+		
+	\item 
+			$\displaystyle
+			T: \left| 
+			\begin{array}{ccc}
+				\R^{n \times m} & \to & \R^{m \times n} \\
+				A & \mapsto & A^{\sT}
+			\end{array}
+		\right.
+		\quad$ where $A^{\sT}$ is transpose of $A$, i.e. the $m \times n$ matrix defined by
+		$$
+		\big(A^{\sT}\big)_{i,j} = A_{j,i} \qquad \text{for all} \quad (i,j) \in \{1, \dots, m\}\times \{1, \dots, n\}.
+		$$
+		
+\begin{proof}
+		%question (c)
+		Yes. Given A, B $\in \R^{m \times n}$:
+		$$
+		((A+B)^T)_{i,j} = A_{j,i}+B_{j,i} = A^T + B^T
+		$$
+		$$
+		(\lambda A^T)_{i,j} = \lambda A_{j,i} = \lambda (A^T)_{i,j}
+		$$
+		As both the additive and scalar multiplication properties for the transpose of A (from A) hold true, it is a valid linear transformation.
+\end{proof}
+		
+	\item 
+			$\displaystyle
+			T: \left| 
+			\begin{array}{ccc}
+				\R^{n \times n} & \to & \R \\
+				A & \mapsto & \Tr(A)
+			\end{array}
+		\right.\quad$ where $\Tr(A)$ is the trace of the matrix $A$, defined by 
+		$$\Tr(A) = \sum_{i=1}^n A_{i,i} \,.$$
+		
+\begin{proof}
+		%question (d)
+		Yes. Given A, B $\in \R^{n \times n}$:
+		$$
+		Tr(A+B) = \sum_{i=1}^n (A_{i,i}+B_{i,i}) = \sum_{i=1}^n A_{i,i} + \sum_{i=1}^n B_{i,i} = Tr(A) + Tr(B)
+		$$
+		$$
+		Tr(\lambda A) = \sum_{i=1}^n \lambda A_{i,i} = \lambda \sum_{i=1}^n A_{i,i}  = \lambda Tr(A)
+		$$
+		As both the additive and scalar multiplication properties for the Trace of A (from A) hold true, it is a valid linear transformation.
+\end{proof}
+		
+	\end{enumerate}
+\end{problem}
+
+\vspace{5mm}
+
+\begin{problem}[3 points]
+	Let $f: \R^2 \to \R^3$ be a linear transformation such that
+	$$
+	f(1,2) = (1,2,3)
+	\qquad \text{and} \qquad f(2,2) = (1,0,1).
+	$$
+	\begin{enumerate}[label=\normalfont(\textbf{\alph*})]
+		\item Compute the matrix (canonically) associated to $f$.\\
+		\begin{proof}
+		%question (a)
+		f is a 3 x 2 matrix whose columns are described by:
+		$$ f = 
+			\begin{pmatrix}
+			\vdots & \vdots \\
+			f_1 & f_2 \\
+			\vdots & \vdots
+			\end{pmatrix}
+		        \in \R^{3x2}
+		$$
+		$$
+		f(1,2) = (1,2,3) \Rightarrow f_1 + 2f_2 = (1,2,3)
+		$$
+		$$
+		f(2,2) = (1,0,1) \Rightarrow 2 f_1 + 2 f_2 = (1,0,1)
+		$$
+		Now we have two equations with two variables, solving the system of equations gives:
+		$$
+		f_1 = (0,-2,-2)
+		$$
+		$$
+		f_2 = ( \frac{1}{2} , 2, \frac{5}{2} )
+		$$
+		$$ f = 
+			\begin{pmatrix}
+			0 & \frac{1}{2}\\
+			-2 & 2\\
+			-2 & \frac{5}{2}
+			\end{pmatrix}
+		$$
+		\end{proof}
+		\item Compute the set $\{x \in \R^2 \, | \, f(x) = (1,4,5) \}$.\\
+		\begin{proof}
+		%question (b)
+		$$ f = 
+			\begin{pmatrix}
+			0 f_1& \frac{1}{2}f_2\\
+			-2 f_1& 2f_2\\
+			-2 f_1& \frac{5}{2}f_2
+			\end{pmatrix}
+		=
+			\begin{pmatrix}
+			1\\
+			4\\
+			5
+			\end{pmatrix}
+		$$
+		Solving the system of equations gives $f_1 = 0$ and $f_2 = 2$ thus x = (0,2)
+		\end{proof}
+		\item Compute the set $\{x \in \R^2 \, | \, f(x) = (2,4,5) \}$.\\
+		\begin{proof}
+		%question (c)
+		$$ f = 
+			\begin{pmatrix}
+			0 f_1& \frac{1}{2}f_2\\
+			-2 f_1& 2f_2\\
+			-2 f_1& \frac{5}{2}f_2
+			\end{pmatrix}
+		=
+			\begin{pmatrix}
+			2\\
+			4\\
+			5
+			\end{pmatrix}
+		$$
+		The system of equations does not resolve, suppose $f_2 = 4$, thus resolving row 1. Then $f_1$ for row 2 = 2 and row 3 = $\frac{5}{2}$. As 2 $\neq \frac{5}{2}$ there is no solution x such that f(x) = (2,4,5).
+		\end{proof}
+	\end{enumerate}
+\end{problem}
+\vspace{5mm}
+
+\begin{problem}[2 points]
+	Let $B \in \R^{4 \times 3}$ be a matrix with arbitrary entries:
+	$$
+	B = 
+	\begin{pmatrix}
+		B_{1,1} & B_{1,2} & B_{1,3}\\
+		B_{2,1} & B_{2,2} & B_{2,3}\\
+		B_{3,1} & B_{3,2} & B_{3,3}\\
+		B_{4,1} & B_{4,2} & B_{4,3}
+	\end{pmatrix}.
+	$$
+	Find two matrices $A$ and $C$ such that
+	$$
+	A B C = 
+	\begin{pmatrix}
+		B_{1,2} & B_{1,1} & B_{1,3} & B_{1,2} \\
+		B_{2,2} + B_{3,2} & B_{2,1} + B_{3,1} & B_{2,3} + B_{3,3} & B_{2,2} + B_{3,2} \\
+		B_{4,2} & B_{4,1} & B_{4,3} & B_{4,2}
+	\end{pmatrix}
+	$$
+	holds for any $B$ defined above.
+\end{problem}
+\begin{proof}
+	%question 2.3 
+	To complete the transformation described above the following actions must take place:
+	\begin{enumerate}[label=\normalfont(\textbf{\alph*})]
+	\item column 2 goes to column 1
+	\item column 1 goes to column 2
+	\item column 3 goes to column 3
+	\item column 2 goes to column 4
+	\item row 3 is added to row 2
+	\item row 3 is removed
+	\end{enumerate}
+	We can complete steps a-d by rearranging columns of the identity matrix as follows:
+	$$
+		\begin{pmatrix}
+		0 & 1 & 0 & 0 \\
+		1 & 0 & 0 & 1 \\
+		0 & 0 & 1 & 0 \\
+		0 & 0 & 0 & 0
+		\end{pmatrix}
+	$$
+	To complete step e, add row 3 to row 2, we add row 3 into row 2 for our modified identify matrix, matrix A:
+	$$ A = 
+		\begin{pmatrix}
+		0 & 1 & 0 & 0 \\
+		1 & 0 & 1 & 1 \\
+		0 & 0 & 1 & 0 \\
+		0 & 0 & 0 & 0
+		\end{pmatrix}
+	$$
+	Then, to complete step f, to transform the dimensions of the matrix and remove row 3,  we can use the identity matrix without the row 3, as matrix, "C":
+	$$ C = 
+		\begin{pmatrix}
+		1 & 0 & 0 & 0 \\
+		0 & 1 & 0 & 0 \\
+		0 & 0 & 0 & 1
+		\end{pmatrix}
+	$$
+\end{proof}
+
+\begin{problem}[3 points]\leavevmode
+	\begin{enumerate}[label=\normalfont(\textbf{\alph*})]
+		\item Let $A$ be a $n \times m$ matrix. Show that the image $\Im(A)$ and the kernel $\Ker(A)$ of $A$ are subspaces of respectively $\R^n$ and $\R^m$.
+		\item Let
+			$$
+			A = 
+			\begin{pmatrix}
+				1 & 2 & 1 & 2 \\
+				-1 & 1 & -1 & 1 \\
+				0 & 1 & 0 & 2 
+			\end{pmatrix}.
+			$$
+		\begin{proof}
+		$$\Ker(A) = {x \in \R^m | Ax = 0}$$
+		\begin{enumerate}
+			\item Let $u, v \in \Ker(A) \Rightarrow Au = 0$ and $Av = 0$\\
+			$$ Au + Av = 0 \Rightarrow A(u+v) = 0 \Rightarrow u + v \in \Ker(A)$$
+			\item Let $u \in \Ker(A) \Rightarrow Au = 0$, for any scalar $\alpha \in \R$,\\
+			$$ \alpha A u = \alpha . 0 = 0 $$
+			$$ A(\alpha u) = 0 \Rightarrow \alpha u \in \Ker(A)$$
+			\item A.0 = 0 $\Rightarrow \in \Ker(A)$
+		\end{enumerate}
+		$$\Im(A) = {Ax \in \R^n | x \in \R^m}$$
+		\begin{enumerate}
+			\item Let $u, v \in \Im(A) \Rightarrow$, there exists $x, y \in \R^m$ such that Ax = u and Ay = v.
+			$$ \Rightarrow Ax + Ay = u + v \Rightarrow A(x+y) = u + v \Rightarrow u + v \in \Im(A)$$
+			\item Let u $\in \Im(A) \Rightarrow$, there exists $x \in \R^m$ such that Ax = u, for any scalar $\alpha \in \R$,
+			$$ \alpha A x = \alpha . u$$
+			$$ \Rightarrow A(\alpha x) = \alpha u \Rightarrow \alpha u \in \Im(A)$$
+			\item A.0 = 0 $\Rightarrow 0 \in \Im(A)$
+		\end{enumerate}
+		\end{proof}
+		\vspace{5mm}\\
+		Compute a basis of $\Ker(A)$ and show that $\Im(A) = \R^3$.\\
+		\vspace{2mm}\\
+		\begin{proof}
+		$$A = 
+			\begin{pmatrix}
+				1 & 2 & 1 & 2 \\
+				-1 & 1 & -1 & 1 \\
+				0 & 1 & 0 & 2 
+			\end{pmatrix}
+		$$
+		Solving the system of linear equations
+		$$ 	c1 \begin{pmatrix}
+				1 \\
+				-1  \\
+				0 
+			\end{pmatrix}
+			+ c2 \begin{pmatrix}
+				2 \\
+				1  \\
+				1  
+			\end{pmatrix}
+			+ c3 \begin{pmatrix}
+				 1  \\
+				 -1 \\
+				 0  
+			\end{pmatrix}
+			+ c4 \begin{pmatrix}
+				 2 \\
+				 1 \\
+				 2 
+			\end{pmatrix} = 0
+		$$
+		Yields the following basis for $\Ker(A)$:
+		$$ \begin{pmatrix}
+				-1 \\
+				0 \\
+				1 \\
+				0 
+			\end{pmatrix}
+		$$
+		Additionally, because we see that columns 1 and 3 are identical, we know know that the $\Im(A)$ or unique column space, can be reduced from $\R^4$ to $\R^3$.
+		\end{proof}
+	\end{enumerate}
+\end{problem}
+
+\vspace{5mm}
+
+\begin{problem}[$\star$]
+	Let $A \in \R^{m \times n}$ and $B \in \R^{k \times n}$. 
+	Prove that there exists a matrix $C \in \R^{m \times k}$ such that $A = CB$ if and only if $\Ker(B)$ is a subspace of $\Ker(A)$.
+\end{problem}
+%\begin{proof}
+%Answer
+%\end{proof}
+\vspace{1mm}
+
+\vspace{1cm}
+\centerline{\pgfornament[width=7cm]{87}}
+
+%\bibliographystyle{plain}
+%\bibliography{./references.bib}
+\end{document}
